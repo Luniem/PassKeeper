@@ -5,6 +5,6 @@ export interface PaswordEntry {
     logo: string,
     url: string,
     passwordHash: string,
-    username: string
+    username: string,
     tags: Tags
 }

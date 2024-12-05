@@ -1,0 +1,129 @@
+body {
+  background: #A5AEC3;
+  color: aliceblue;
+  font-family: Arial;
+  margin: 0 !important;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.title {
+  margin-top: 0 !important;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  background-color: #2F2F47;
+  color: aliceblue;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.button {
+  background-color: #3B77C1;
+  color: aliceblue;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  margin: 0.2rem 0 1rem 1rem;
+}
+
+.button:hover {
+  background-color: #46d0ea;
+  transform: translateY(-3px);
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button:active {
+  background-color: #0088c7;
+}
+
+.cards {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 2rem 0.4rem 0.4rem 1rem;
+}
+
+.cardsItem {
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #6E7688;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cardsItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.cardsItem img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.cardsItem h3 {
+  margin: 0.6rem;
+}
+
+.cardsItem p {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.cardsItem a:hover {
+  color: #46d0ea;
+}
+
+.cardsItem a {
+  margin-top: 0.6rem;
+  color: #000b44;
+  font-size: 0.8rem;
+}
+
+.separator {
+  width: 100vw;
+  height: 0.1rem;
+  background-color: rgba(145, 145, 145, 0.8);
+  border: none;
+  margin: 0.4rem 1rem 1rem 1rem;
+}
+
+.sortLinks {
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+}
+
+.sortLink {
+  cursor: pointer;
+  transition: color 0.3s ease;
+  margin-right: 1rem;
+}
+
+.sortLink:hover {
+  color: #46d0ea;
+}
