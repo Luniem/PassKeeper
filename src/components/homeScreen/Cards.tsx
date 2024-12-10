@@ -1,10 +1,9 @@
 import styles from "../../styles.module.css";
 import {useState} from "react";
-import {PaswordEntry} from "../../models/passwordEntry"
+import {PasswordEntry} from "../../models/passwordEntry"
 import {Tags} from "../../models/tag";
 
-
-const exampleData: PaswordEntry[] = [
+const exampleData: PasswordEntry[] = [
     {
         appName: "TestApp1",
         logo: "https://via.placeholder.com/150?text=Logo+1",
@@ -33,7 +32,7 @@ const exampleData: PaswordEntry[] = [
 
 type FetchResult = {
     status: "loading" | "success" | "error";
-    data: PaswordEntry[] | null;
+    data: PasswordEntry[] | null;
     error: any;
 };
 
@@ -65,9 +64,17 @@ function Cards() {
 
     return (
         <>
-            <div className={styles.sortLinks}>
-                <span onClick={() => handleSort("appName")} className={styles.sortLink}>Sort by App Name</span>
-                <span onClick={() => handleSort("tags")} className={styles.sortLink}>Sort by Tags</span>
+            <div>
+                <div className={styles.sortLinks}>
+                    <select
+                        value={sortBy}
+                        onChange={(e) => handleSort(e.target.value)}
+                        className={styles.sortDropdown}
+                    >
+                        <option value="appName">Sort by App Name</option>
+                        <option value="tags">Sort by Tags</option>
+                    </select>
+                </div>
             </div>
 
             <hr className={styles.separator}/>

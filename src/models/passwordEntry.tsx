@@ -1,6 +1,6 @@
 import {Tags} from "./tag";
 
-export interface PaswordEntry {
+export interface PasswordEntry {
     appName: string,
     logo: string,
     url: string,
