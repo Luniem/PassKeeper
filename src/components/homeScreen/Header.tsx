@@ -3,9 +3,9 @@ import styles from "../../styles.module.css";
 function Header() {
     return (
         <>
-            <div>
-                <h1 className={styles.title}>PassKeeper</h1>
-            </div>
+            <header className={styles.title}>
+                <h1>PassKeeper</h1>
+            </header>
         </>
     );
 }

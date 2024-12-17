@@ -1,19 +1,18 @@
 import styles from "../../styles.module.css";
-import {useState} from "react";
+import React, {useState} from "react";
 
 type props = {
-   // onSearch: (searchTerm: string) => void;
-}
+    onSearch: (searchTerm: string) => void;
+};
 
-function Search() {
-
+function Search({onSearch}: props) {
     const [searchTerm, setSearchTerm] = useState("");
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchTerm(value);
-        //onSearch(value);
-    };
+        onSearch(value);
+    }
 
     return (
         <div className={styles.searchContainer}>
@@ -28,4 +27,4 @@ function Search() {
     );
 }
 
-export {Search}
+export {Search};

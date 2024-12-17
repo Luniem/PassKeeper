@@ -1,6 +1,5 @@
 import {useState} from "react";
 import {invoke} from "@tauri-apps/api/core";
-import styles from "./styles.module.css";
 import {HomeScreen} from "./screens/HomeScreen";
 
 
@@ -15,7 +14,7 @@ function App() {
 
     return (
         <>
-            <div className={styles.container}>
+            <div>
                 <HomeScreen/>
             </div>
         </>

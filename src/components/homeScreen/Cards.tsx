@@ -1,7 +1,8 @@
 import styles from "../../styles.module.css";
 import {useState} from "react";
-import {PasswordEntry} from "../../models/passwordEntry"
+import {PasswordEntry} from "../../models/passwordEntry";
 import {Tags} from "../../models/tag";
+import {Modal} from "../detailScreen/Modal";
 
 const exampleData: PasswordEntry[] = [
     {
@@ -9,7 +10,7 @@ const exampleData: PasswordEntry[] = [
         logo: "https://via.placeholder.com/150?text=Logo+1",
         url: "www.App1.com",
         passwordHash: "Hash1",
-        username: "App1User",
+        username: "App1User ",
         tags: Tags.Shopping
     },
     {
@@ -17,7 +18,7 @@ const exampleData: PasswordEntry[] = [
         logo: "https://via.placeholder.com/150?text=Logo+2",
         url: "www.App2.com",
         passwordHash: "Hash2",
-        username: "App2User",
+        username: "App2User ",
         tags: Tags.Shopping
     },
     {
@@ -25,9 +26,9 @@ const exampleData: PasswordEntry[] = [
         logo: "https://via.placeholder.com/150?text=Logo+3",
         url: "www.App3.com",
         passwordHash: "Hash3",
-        username: "App3User",
+        username: "App3User ",
         tags: Tags.Gaming
-    },
+    }
 ];
 
 type FetchResult = {
@@ -36,7 +37,11 @@ type FetchResult = {
     error: any;
 };
 
-function Cards() {
+type Props = {
+    searchTerm: string;
+};
+
+function Cards({searchTerm}: Props) {
     const [result, setResult] = useState<FetchResult>({
         status: "success",
         data: exampleData,
@@ -44,22 +49,39 @@ function Cards() {
     });
 
     const [sortBy, setSortBy] = useState<string>("appName");
+    const [selectedEntry, setSelectedEntry] = useState<PasswordEntry | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+    const filteredData = result.data
+        ? result.data.filter((entry) =>
+            entry.appName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            entry.url.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            entry.username.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        : [];
+
+    const sortedData = [...filteredData].sort((a, b) => {
+        if (sortBy === "appName") {
+            return a.appName.localeCompare(b.appName);
+        }
+        if (sortBy === "tags") {
+            return a.tags.localeCompare(b.tags);
+        }
+        return 0;
+    });
+
+    const openModal = (entry: PasswordEntry) => {
+        setSelectedEntry(entry);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedEntry(null);
+    };
 
     const handleSort = (criteria: string) => {
         setSortBy(criteria);
-        const sortedData = [...result.data!].sort((a, b) => {
-            if (criteria === "appName") {
-                return a.appName.localeCompare(b.appName);
-            }
-            if (criteria === "tags") {
-                return a.tags.localeCompare(b.tags);
-            }
-            return 0;
-        });
-        setResult((prev) => ({
-            ...prev,
-            data: sortedData,
-        }));
     };
 
     return (
@@ -81,27 +103,29 @@ function Cards() {
 
             {result.status === "success" && (
                 <div className={styles.cards}>
-                    {Array.isArray(result.data)
-                        ? result.data.map((d) => (
-                            <div className={styles.cardsItem} key={d.appName}>
+                    {Array.isArray(sortedData) && sortedData.length > 0 ? (
+                        sortedData.map((d, index) => (
+                            <div className={styles.cardsItem} key={index} onClick={() => openModal(d)}>
                                 <img src={d.logo} alt={""}/>
                                 <h3>{d.appName}</h3>
-                                <p><strong>Username:</strong> {d.username}</p>
-                                <p><strong>Password:</strong> {d.passwordHash}</p>
-                                <p><strong>Tag:</strong> {d.tags}</p>
+                                <p>Username: {d.username}</p>
+                                <p>Password: {d.passwordHash}</p>
+                                <p>Tag: {d.tags}</p>
                                 <a href={d.url}>Visit Website</a>
                             </div>
                         ))
-                        : null}
-                    {result.data == null && <p>No images available</p>}
+                    ) : (
+                        <p>No results found</p>
+                    )}
                 </div>
             )}
 
             {result.status === "error" && <p>{result.error.message}</p>}
-
             {result.status === "loading" && <p>Loading...</p>}
+
+            <Modal isOpen={isModalOpen} onClose={closeModal} entry={selectedEntry}/>
         </>
     );
 }
 
-export {Cards}
+export {Cards};

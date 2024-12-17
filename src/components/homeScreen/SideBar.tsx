@@ -1,36 +1,54 @@
 import {Sidebar, Menu, MenuItem} from "react-pro-sidebar";
-import {Routes, Route, Link} from "react-router-dom";
-import styles from "../../styles.module.css";
+import {Link} from "react-router-dom";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
-import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import ReceiptRoundedIcon from "@mui/icons-material/ReceiptRounded";
-import {Dashboard} from "./Dashboard";
+import ReceiptRoundedIcon from "@mui/icons-material/ReceiptRounded"
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import React from "react";
 
-function SideBar() {
+type props = {
+    collapsed: boolean;
+    toggleSidebar: () => void;
+}
+
+function SideBar({collapsed, toggleSidebar}: props) {
     return (
         <>
-            <div className={styles.sidebar}>
-                <Sidebar >
-                    <Menu className={styles.app}>
-                        <MenuItem component={<Link to="dashboard" className="link"/>}
-                                  icon={<GridViewRoundedIcon/>}> Dashboard </MenuItem>
-                        <MenuItem component={<Link to="passwords" className="link"/>}
-                                  icon={<ShieldRoundedIcon/>}> Passwords </MenuItem>
-                        <MenuItem component={<Link to="personalInfo" className="link"/>}
-                                  icon={<AccountCircleRoundedIcon/>}> Personal Info </MenuItem>
-                        <MenuItem component={<Link to="secureNotes" className="link"/>}
-                                  icon={<ReceiptRoundedIcon/>}> Secure Notes </MenuItem>
-                    </Menu>
-                </Sidebar>
-                <section className={styles.section}>
-                    <Routes>
-                        <Route path="dashboard" element={<Dashboard/>}/>
-                    </Routes>
-                </section>
-            </div>
+            <Sidebar backgroundColor='#2F2F47' collapsed={collapsed}>
+                <Menu menuItemStyles={{
+                    button: ({level, active}) => {
+                        if (level === 0 || level === 1) {
+                            return {
+                                backgroundColor: active ? '#6E7688' : undefined,
+                                color: active ? 'white' : undefined,
+                                "&:hover": {
+                                    backgroundColor: '#6E7688',
+                                    color: 'white',
+                                }
+                            }
+                        }
+                    },
+                }}>
+                    <MenuItem
+                        icon={<MenuOutlinedIcon/>}
+                        onClick={() => {
+                            toggleSidebar();
+                        }}
+                        style={{textAlign: "center"}}
+                    />
+                    <MenuItem
+                        component={<Link to="dashboard" className="link"/>}
+                        icon={<GridViewRoundedIcon/>}>
+                        Dashboard
+                    </MenuItem>
+                    <MenuItem
+                        component={<Link to="secureNotes" className="link"/>}
+                        icon={<ReceiptRoundedIcon/>}>
+                        Secure Notes
+                    </MenuItem>
+                </Menu>
+            </Sidebar>
         </>
     );
 }
 
-export {SideBar}
+export {SideBar};
