@@ -1,35 +1,10 @@
 import styles from "../../styles.module.css";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {PasswordEntry} from "../../models/passwordEntry";
 import {Tags} from "../../models/tag";
 import {Modal} from "../detailScreen/Modal";
-
-const exampleData: PasswordEntry[] = [
-    {
-        appName: "TestApp1",
-        logo: "https://via.placeholder.com/150?text=Logo+1",
-        url: "www.App1.com",
-        passwordHash: "Hash1",
-        username: "App1User ",
-        tags: Tags.Shopping
-    },
-    {
-        appName: "App2",
-        logo: "https://via.placeholder.com/150?text=Logo+2",
-        url: "www.App2.com",
-        passwordHash: "Hash2",
-        username: "App2User ",
-        tags: Tags.Shopping
-    },
-    {
-        appName: "App3",
-        logo: "https://via.placeholder.com/150?text=Logo+3",
-        url: "www.App3.com",
-        passwordHash: "Hash3",
-        username: "App3User ",
-        tags: Tags.Gaming
-    }
-];
+import {Link} from "react-router-dom";
+import { invoke } from "@tauri-apps/api/core";
 
 type FetchResult = {
     status: "loading" | "success" | "error";
@@ -42,13 +17,28 @@ type Props = {
 };
 
 function Cards({searchTerm}: Props) {
+
+    useEffect(() => {
+        async function fetchEntries() {
+            const entries = await invoke<PasswordEntry[]>("get_password_entries");
+            setResult({
+                data: entries,
+                error: null,
+                status: "success"
+            })
+        }
+
+        fetchEntries()
+    }, []) 
+
     const [result, setResult] = useState<FetchResult>({
         status: "success",
-        data: exampleData,
+        data: null,
         error: null,
     });
 
-    const [sortBy, setSortBy] = useState<string>("appName");
+
+    const [sortBy, setSortBy] = useState<string>("");
     const [selectedEntry, setSelectedEntry] = useState<PasswordEntry | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -72,6 +62,7 @@ function Cards({searchTerm}: Props) {
 
     const openModal = (entry: PasswordEntry) => {
         setSelectedEntry(entry);
+
         setIsModalOpen(true);
     };
 
@@ -89,12 +80,12 @@ function Cards({searchTerm}: Props) {
             <div>
                 <div className={styles.sortLinks}>
                     <select
-                        value={sortBy}
                         onChange={(e) => handleSort(e.target.value)}
                         className={styles.sortDropdown}
                     >
-                        <option value="appName">Sort by App Name</option>
-                        <option value="tags">Sort by Tags</option>
+                        <option value="" disabled hidden>Sort by</option>
+                        <option value="appName">App Name</option>
+                        <option value="tags">Tags</option>
                     </select>
                 </div>
             </div>
@@ -106,12 +97,12 @@ function Cards({searchTerm}: Props) {
                     {Array.isArray(sortedData) && sortedData.length > 0 ? (
                         sortedData.map((d, index) => (
                             <div className={styles.cardsItem} key={index} onClick={() => openModal(d)}>
-                                <img src={d.logo} alt={""}/>
+                                <img src={"//" + d.logo} alt={""}/>
                                 <h3>{d.appName}</h3>
                                 <p>Username: {d.username}</p>
                                 <p>Password: {d.passwordHash}</p>
                                 <p>Tag: {d.tags}</p>
-                                <a href={d.url}>Visit Website</a>
+                                <a href={"https://"+d.url} target="_blank" rel="noopener noreferrer">Visit Website</a>
                             </div>
                         ))
                     ) : (

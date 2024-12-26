@@ -3,12 +3,15 @@ import {Tags} from "../models/tag";
 import {Button} from "../components/reuse/Button";
 import styles from "../styles.module.css";
 import {PasswordEntry} from "../models/passwordEntry";
+import { invoke } from '@tauri-apps/api/core';
 
 type props = {
     handleCloseModal: () => void;
+    title: string;
 }
 
-function AddEditPasswordScreen({handleCloseModal}: props) {
+function AddEditPasswordScreen({handleCloseModal, title}: props) {
+    const [id, setID] = useState('');
     const [appName, setAppName] = useState('');
     const [logo, setLogo] = useState("");
     const [username, setUsername] = useState('');
@@ -20,6 +23,7 @@ function AddEditPasswordScreen({handleCloseModal}: props) {
     const handleSavePassword = (e: React.FormEvent) => {
         e.preventDefault();
         const newEntry: PasswordEntry = {
+            id,
             appName,
             logo,
             url,
@@ -27,6 +31,8 @@ function AddEditPasswordScreen({handleCloseModal}: props) {
             username,
             tags
         };
+
+        invoke("add_password", {passwordEntry: newEntry});
 
         console.log(newEntry);
         handleCloseModal();
@@ -39,7 +45,7 @@ function AddEditPasswordScreen({handleCloseModal}: props) {
     return (
         <>
             <div className={styles.addEditContainer}>
-                <h2 className={styles.addEditTitle}>Add/Edit Password</h2>
+                <h2 className={styles.addEditTitle}>{title}</h2>
                 <form onSubmit={handleSavePassword}>
                     <input className={styles.formInput} value={appName}
                            onChange={(e) => setAppName(e.target.value)}
@@ -71,13 +77,11 @@ function AddEditPasswordScreen({handleCloseModal}: props) {
                     </select>
                     <div className={styles.formButtons}>
                         <Button type={"reset"} icon={""} name={"cancel"}
-                                onClick={handleCancel} color="primary">
-                            Cancel
-                        </Button>
+                                onClick={handleCancel} />
+                       
                         <Button type={"submit"} icon={""} name={"save"}
-                                onClick={handleSavePassword} color="primary">
-                            Save
-                        </Button>
+                                onClick={handleSavePassword} />
+                       
                     </div>
                 </form>
             </div>

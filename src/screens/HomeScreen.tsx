@@ -4,6 +4,7 @@ import {useState} from "react";
 import { Routes, Route } from "react-router-dom";
 import {Dashboard} from "../components/homeScreen/Dashboard";
 import styles from "../styles.module.css";
+import {DetailScreen} from "./DetailSceen";
 
 function HomeScreen() {
     const [menuCollapse, setMenuCollapse] = useState(true);
@@ -21,6 +22,7 @@ function HomeScreen() {
                         <Routes>
                             <Route path="dashboard" element={<Dashboard />} />
                             <Route path="/" element={<Dashboard />} />
+                            <Route path="detail" element={<DetailScreen />} />
                         </Routes>
                     </main>
                 </div>
