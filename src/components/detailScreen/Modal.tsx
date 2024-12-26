@@ -1,17 +1,21 @@
-import styles from "../styles.module.css";
-import {useLocation} from "react-router-dom";
+import React from 'react';
+import styles from "../../styles.module.css";
+import {PasswordEntry} from "../../models/passwordEntry";
+import {Button} from "../reuse/Button";
 
-function DetailScreen() {
-    const location = useLocation();
-    const { entry } = location.state || {}
+type props = {
+    isOpen: boolean;
+    onClose: () => void;
+    entry: PasswordEntry | null;
+};
 
-    if (!entry) {
-        return <div>No entry found</div>;
-    }
+function Modal({isOpen, onClose, entry}: props) {
+    if (!isOpen || !entry) return null;
 
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
+                <Button onClick={onClose} className={styles.closeButton} name={"X"}/>
                 <h2>{entry.appName}</h2>
                 <div className={styles.modalContentBlock}>
                     <img src={entry.logo} alt={entry.appName}/>
@@ -21,10 +25,10 @@ function DetailScreen() {
                         <p><strong>Tag:</strong> {entry.tags}</p>
                     </div>
                 </div>
-                <a href={"https://"+entry.url}>Visit Website</a>
+                <a href={entry.url}>Visit Website</a>
             </div>
         </div>
     );
 }
 
-export {DetailScreen};
+export {Modal};
